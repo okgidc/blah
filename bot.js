@@ -52,6 +52,16 @@ const replies = {
     "Grace? Always trying to stand out like a pick-me. Must be exhausting.",
     "Grace? If she's not picking fights, she's trying to convince everyone how unique she is.",
     "Grace? She’s got that energy like she’s auditioning for a role in a drama series.",
+  ],
+  nicole: [
+    "Nicole? A furry with an OnlyFans? Guess she’s trying to keep things interesting... in the worst way.",
+    "Nicole's only claim to fame is probably the number of furries in her OnlyFans subscriptions. What a flex.",
+    "Nicole? Must be real proud of her furry outfits and OnlyFans. Maybe try a new hobby, like, I don’t know, not embarrassing yourself?",
+  ],
+  pig: [
+    "Pig? Wow, I didn't know we were running a farm here. Hope you like the mud!",
+    "Calling someone a pig? Are you sure you’re not just projecting? I’ve seen cleaner pigs than that.",
+    "Pig? You should check your own reflection before calling others that. Might find a hog in the mirror.",
   ]
 };
 
@@ -84,12 +94,12 @@ client.on('messageCreate', (message) => {
   console.log(`Received message: ${message.content}`);
 
   // Check for specific names or negative words in the message
-  const containsNames = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace'].some(name => content.includes(name));
+  const containsNames = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].some(name => content.includes(name));
   const containsNegativeWords = Object.keys(negativeWordsReplies).some(word => content.includes(word));
 
   // Respond with pre-defined replies based on names or negative words
   if (containsNames) {
-    const name = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace'].find(name => content.includes(name));
+    const name = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].find(name => content.includes(name));
     const response = replies[name][Math.floor(Math.random() * replies[name].length)];
     message.reply(response);
   } else if (containsNegativeWords) {
