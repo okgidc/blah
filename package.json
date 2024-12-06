@@ -13,7 +13,8 @@
   "dependencies": {
     "discord.js": "^14.7.1",
     "dotenv": "^16.4.7",
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "express": "^4.18.2"  // Added express as a dependency
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
