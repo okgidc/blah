@@ -70,25 +70,26 @@ const replies = {
 };
 
 const negativeWordsReplies = {
-  hate: "Hate? That's a strong word! You sure you want to go there?",
-  stupid: "Stupid? Ouch. Let's keep it a bit smarter, shall we?",
-  dumb: "Dumb? Not the best way to express yourself, but okay...",
-  idiot: "Idiot? That's harsh, buddy. Maybe try being nicer?",
-  loser: "Loser? That's not a very nice thing to call someone.",
-  trash: "Trash? Well, everyone has their days, don't be too harsh.",
-  garbage: "Garbage? Yikes, someone's having a rough day.",
-  ugly: "Ugly? I bet your mirror would disagree with you.",
-  kill: "Whoa, that's way too far. Let's dial it down.",
-  worthless: "Worthless? Nah, everyone has value, even if you're frustrated.",
-  moron: "Moron? Now that's a strong insult. Let's be kind, shall we?",
-  suck: "Suck? We all have bad moments, don't worry about it.",
-  broke: "Broke? Money isn't everything, but good luck out there.",
-  scam: "Scam? That's a serious accusation, maybe get the facts straight first.",
-  dumbass: "Dumbass? Try to keep it cool, alright?",
-  asshole: "Asshole? That's not a great look, my friend.",
-  fuck: "Watch the language! Let's keep it clean.",
-  bitch: "Bitch? That's pretty aggressive, don't you think?",
+  hate: "Hate? You must be talking about yourself. The mirror never lies.",
+  stupid: "Stupid? Oh, the irony in this message is unmatched.",
+  dumb: "Dumb? Bold words coming from someone who types like that.",
+  idiot: "Idiot? Takes one to know one, doesn’t it?",
+  loser: "Loser? Says the person spending time arguing with a bot.",
+  trash: "Trash? I’d suggest looking in your room for the source.",
+  garbage: "Garbage? That’s rich coming from you. Recycling day is tomorrow.",
+  ugly: "Ugly? You’ve got a lot of confidence for someone hiding behind a screen.",
+  kill: "Kill? The only thing you’re killing is the vibe here.",
+  worthless: "Worthless? Coming from you, that’s practically a compliment.",
+  moron: "Moron? Well, you’ve got the credentials to recognize one, I see.",
+  suck: "Suck? Like the energy you’re putting into this weak insult?",
+  broke: "Broke? Don’t project your financial situation onto me.",
+  scam: "Scam? Did your personality come with a receipt?",
+  dumbass: "Dumbass? Takes one to call one, I suppose.",
+  asshole: "Asshole? Oh, you’re just mad I do my job better than you.",
+  fuck: "Wow, the vocabulary of a poet. Truly inspiring.",
+  bitch: "Bitch? At least I don’t bark like you."
 };
+
 
 // Define the event listener for new messages
 client.once('ready', () => {
