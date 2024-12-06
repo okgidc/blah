@@ -1,4 +1,31 @@
-// Add "pig" to the negative words replies or specific names replies
+import dotenv from 'dotenv';
+import { Client, GatewayIntentBits } from 'discord.js';
+import express from 'express';
+
+dotenv.config();  // Load environment variables
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ],
+});
+
+// Set up Express server to respond to UptimeRobot
+const app = express();
+
+// Define an endpoint to respond to UptimeRobot pings
+app.get('/', (req, res) => {
+  res.send('Bot is online');
+});
+
+// Start the Express server
+const PORT = process.env.PORT || 8080; // Use Render's dynamic port or fallback to 8080
+app.listen(PORT, () => {
+  console.log(`Express server is running on port ${PORT}`);
+});
+
 const replies = {
   hannah: [
     "Hannah? I swear she walks at the speed of dial-up internet.",
@@ -31,18 +58,17 @@ const replies = {
     "Grace? She’s got that energy like she’s auditioning for a role in a drama series.",
   ],
   nicole: [
-    "Nicole? The furry who thinks OnlyFans is a career move. Hope she's getting paid for that costume.",
-    "Nicole? She probably gets more attention from her OnlyFans than her actual personality. Must be exhausting.",
-    "Nicole? I’m sure her OnlyFans is the only thing keeping her relevant in the furry world.",
+    "Nicole? The furry with an OnlyFans... She thinks everyone’s interested in her cosplay, but it’s really just her only fans.",
+    "Nicole? An OnlyFans model who probably spends more time explaining furry lore than actually living her life.",
+    "Nicole? You’d think with all the fur she wears, she could find a way to hide her cringe-worthy choices.",
   ],
   pig: [
-    "Pig? Wow, I didn't know we were running a farm here. Hope you like the mud!",
+    "Pig? I guess someone has a farm they're running. Hope you're not the one rolling in the mud.",
+    "Pig? Calling someone a pig when you’re the one wallowing in the mud... classy.",
     "Pig? Oink oink, time to clean up your act.",
-    "Pig? Don't talk about farm animals when you're probably just as messy.",
   ],
 };
 
-// List of negative words and their replies
 const negativeWordsReplies = {
   hate: "Hate? That's a strong word! You sure you want to go there?",
   stupid: "Stupid? Ouch. Let's keep it a bit smarter, shall we?",
@@ -64,24 +90,40 @@ const negativeWordsReplies = {
   bitch: "Bitch? That's pretty aggressive, don't you think?",
 };
 
-// Add a check for the "pig" keyword
-client.on('messageCreate', (message) => {
-  if (message.author.bot) return;
+// Define the event listener for new messages
+client.once('ready', () => {
+  console.log('Bot is online and watching /look!');
+  client.user.setActivity('watching /look', { type: 'WATCHING' });
 
-  const content = message.content.toLowerCase();
-  console.log(`Received message: ${message.content}`);
+  // Now that the client is ready, we can listen for messages
+  client.on('messageCreate', (message) => {
+    if (message.author.bot) return;
 
-  // Check for specific names or negative words in the message
-  const containsNames = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].some(name => content.includes(name));
-  const containsNegativeWords = Object.keys(negativeWordsReplies).some(word => content.includes(word));
+    const content = message.content.toLowerCase();
+    console.log(`Received message: ${message.content}`);
 
-  // Respond with pre-defined replies based on names or negative words
-  if (containsNames) {
-    const name = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].find(name => content.includes(name));
-    const response = replies[name][Math.floor(Math.random() * replies[name].length)];
-    message.reply(response);
-  } else if (containsNegativeWords) {
-    const negativeWord = Object.keys(negativeWordsReplies).find(word => content.includes(word));
-    message.reply(negativeWordsReplies[negativeWord]);
-  }
+    // Check for specific names or negative words in the message
+    const containsNames = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].some(name => content.includes(name));
+    const containsNegativeWords = Object.keys(negativeWordsReplies).some(word => content.includes(word));
+
+    // Respond with pre-defined replies based on names or negative words
+    if (containsNames) {
+      const name = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace', 'nicole'].find(name => content.includes(name));
+      const response = replies[name][Math.floor(Math.random() * replies[name].length)];
+      message.reply(response);
+    } else if (containsNegativeWords) {
+      const negativeWord = Object.keys(negativeWordsReplies).find(word => content.includes(word));
+      message.reply(negativeWordsReplies[negativeWord]);
+    } else if (content.includes("pig")) {
+      const pigResponse = replies.pig[Math.floor(Math.random() * replies.pig.length)];
+      message.reply(pigResponse);
+    }
+  });
+});
+
+// Log in to Discord with your token
+client.login(process.env.DISCORD_TOKEN).then(() => {
+  console.log('Bot has successfully logged in!');
+}).catch(err => {
+  console.error('Error logging in:', err);
 });
