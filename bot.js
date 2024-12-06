@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
+import express from 'express';
 
 dotenv.config();  // Load environment variables
 
@@ -7,7 +8,20 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
-// Define concise personal and funny responses
+// Set up Express server to respond to UptimeRobot
+const app = express();
+
+// Define an endpoint to respond to UptimeRobot pings
+app.get('/', (req, res) => {
+  res.send('Bot is online');
+});
+
+// Start the Express server
+const PORT = process.env.PORT || 8080;  // Use Render's dynamic port or fallback to 8080
+app.listen(PORT, () => {
+  console.log(`Express server is running on port ${PORT}`);
+});
+
 const replies = {
   hannah: [
     "Hannah? I swear she walks at the speed of dial-up internet.",
@@ -35,13 +49,13 @@ const replies = {
     "Matteo? Crypto king, business mogul, the person everyone looks up to. If there’s a throne, Matteo’s sitting on it.",
   ],
   grace: [
-    "Grace? Always trying to start drama like it's her full-time job, but it’s just a sad attempt to stand out in a room full of people who aren't even paying attention.",
-    "Grace must have some wild taste if she thought Yako was a good choice. Guess she didn’t mind the age gap—maybe she thought grooming was just part of his 'charm.'",
-    "Grace? Always acting like the main character, but somehow manages to be the extra in everyone else’s story.",
+    "Grace? Always trying to stand out like a pick-me. Must be exhausting.",
+    "Grace? If she's not picking fights, she's trying to convince everyone how unique she is.",
+    "Grace? She’s got that energy like she’s auditioning for a role in a drama series.",
   ]
 };
 
-// List of keywords that indicate negative or offensive language and their corresponding replies
+// List of negative words and their replies
 const negativeWordsReplies = {
   hate: "Hate? That's a strong word! You sure you want to go there?",
   stupid: "Stupid? Ouch. Let's keep it a bit smarter, shall we?",
@@ -69,33 +83,29 @@ client.on('messageCreate', (message) => {
   const content = message.content.toLowerCase();
   console.log(`Received message: ${message.content}`);
 
-  // Check if the message contains any of the specific names or negative words
-  const containsNegativeWords = Object.keys(negativeWordsReplies).some(word => content.includes(word));
+  // Check for specific names or negative words in the message
   const containsNames = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace'].some(name => content.includes(name));
+  const containsNegativeWords = Object.keys(negativeWordsReplies).some(word => content.includes(word));
 
-  // If the message contains a specific name, respond with a pre-defined funny response
+  // Respond with pre-defined replies based on names or negative words
   if (containsNames) {
     const name = ['hannah', 'hana', 'abbie', 'yako', 'matteo', 'grace'].find(name => content.includes(name));
     const response = replies[name][Math.floor(Math.random() * replies[name].length)];
     message.reply(response);
-  }
-  // If the message contains negative words, reply with the corresponding negative word response
-  else if (containsNegativeWords) {
+  } else if (containsNegativeWords) {
     const negativeWord = Object.keys(negativeWordsReplies).find(word => content.includes(word));
     message.reply(negativeWordsReplies[negativeWord]);
   }
 });
 
 client.once('ready', () => {
-  // Set the bot's status to "watching /look"
   client.user.setActivity('watching /look', { type: 'WATCHING' });
   console.log('Bot is online and watching /look!');
 });
 
-client.login(process.env.DISCORD_TOKEN)
-  .then(() => {
-    console.log('Bot has successfully logged in!');
-  })
-  .catch(err => {
-    console.error('Error logging in:', err);
-  });
+// Log in to Discord with your token
+client.login(process.env.DISCORD_TOKEN).then(() => {
+  console.log('Bot has successfully logged in!');
+}).catch(err => {
+  console.error('Error logging in:', err);
+});
