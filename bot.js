@@ -1,27 +1,4 @@
-import dotenv from 'dotenv';
-import { Client, GatewayIntentBits } from 'discord.js';
-import express from 'express';
-
-dotenv.config();  // Load environment variables
-
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
-});
-
-// Set up Express server to respond to UptimeRobot
-const app = express();
-
-// Define an endpoint to respond to UptimeRobot pings
-app.get('/', (req, res) => {
-  res.send('Bot is online');
-});
-
-// Start the Express server
-const PORT = process.env.PORT || 8080;  // Use Render's dynamic port or fallback to 8080
-app.listen(PORT, () => {
-  console.log(`Express server is running on port ${PORT}`);
-});
-
+// Add "pig" to the negative words replies or specific names replies
 const replies = {
   hannah: [
     "Hannah? I swear she walks at the speed of dial-up internet.",
@@ -54,15 +31,15 @@ const replies = {
     "Grace? She’s got that energy like she’s auditioning for a role in a drama series.",
   ],
   nicole: [
-    "Nicole? A furry with an OnlyFans? Guess she’s trying to keep things interesting... in the worst way.",
-    "Nicole's only claim to fame is probably the number of furries in her OnlyFans subscriptions. What a flex.",
-    "Nicole? Must be real proud of her furry outfits and OnlyFans. Maybe try a new hobby, like, I don’t know, not embarrassing yourself?",
+    "Nicole? The furry who thinks OnlyFans is a career move. Hope she's getting paid for that costume.",
+    "Nicole? She probably gets more attention from her OnlyFans than her actual personality. Must be exhausting.",
+    "Nicole? I’m sure her OnlyFans is the only thing keeping her relevant in the furry world.",
   ],
   pig: [
     "Pig? Wow, I didn't know we were running a farm here. Hope you like the mud!",
-    "Calling someone a pig? Are you sure you’re not just projecting? I’ve seen cleaner pigs than that.",
-    "Pig? You should check your own reflection before calling others that. Might find a hog in the mirror.",
-  ]
+    "Pig? Oink oink, time to clean up your act.",
+    "Pig? Don't talk about farm animals when you're probably just as messy.",
+  ],
 };
 
 // List of negative words and their replies
@@ -84,9 +61,10 @@ const negativeWordsReplies = {
   dumbass: "Dumbass? Try to keep it cool, alright?",
   asshole: "Asshole? That's not a great look, my friend.",
   fuck: "Watch the language! Let's keep it clean.",
-  bitch: "Bitch? That's pretty aggressive, don't you think?"
+  bitch: "Bitch? That's pretty aggressive, don't you think?",
 };
 
+// Add a check for the "pig" keyword
 client.on('messageCreate', (message) => {
   if (message.author.bot) return;
 
@@ -106,16 +84,4 @@ client.on('messageCreate', (message) => {
     const negativeWord = Object.keys(negativeWordsReplies).find(word => content.includes(word));
     message.reply(negativeWordsReplies[negativeWord]);
   }
-});
-
-client.once('ready', () => {
-  client.user.setActivity('watching /look', { type: 'WATCHING' });
-  console.log('Bot is online and watching /look!');
-});
-
-// Log in to Discord with your token
-client.login(process.env.DISCORD_TOKEN).then(() => {
-  console.log('Bot has successfully logged in!');
-}).catch(err => {
-  console.error('Error logging in:', err);
 });
